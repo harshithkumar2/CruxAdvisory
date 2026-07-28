@@ -22,7 +22,11 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+}
 
 body {
   font-family: var(--ff-body);
@@ -31,6 +35,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  width: 100%;
 }
 
 img { max-width: 100%; display: block; }
@@ -113,7 +118,7 @@ h3 { font-size: 1.3rem; }
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 300;
   background: rgba(250, 248, 243, 0.85);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
@@ -168,6 +173,8 @@ h3 { font-size: 1.3rem; }
 .nav-cta { margin-left: 8px; padding: 11px 22px; font-size: 0.88rem; }
 
 .nav-toggle {
+  position: relative;
+  z-index: 1;
   display: none;
   flex-direction: column;
   gap: 5px;
@@ -508,10 +515,11 @@ h3 { font-size: 1.3rem; }
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.15);
   backdrop-filter: blur(8px);
-  padding: 26px 36px;
+  padding: 26px 32px;
   border-radius: 18px;
   transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
-  min-width: 300px;
+  width: 100%;
+  max-width: 400px;
   text-align: left;
 }
 .contact-card:hover {
@@ -527,8 +535,15 @@ h3 { font-size: 1.3rem; }
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
+.contact-card > div { min-width: 0; }
 .contact-label { display: block; font-size: 0.78rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-.contact-value { display: block; color: var(--white); font-weight: 700; font-size: 1.15rem; }
+.contact-value {
+  display: block;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: rgba(255,255,255,0.7); padding-top: 70px; }
@@ -599,7 +614,7 @@ h3 { font-size: 1.3rem; }
   .topbar-tag { display: none; }
   .nav-links {
     position: fixed;
-    top: 0; right: -100%;
+    top: 0; right: 0;
     width: min(320px, 82vw);
     height: 100vh;
     background: var(--white);
@@ -607,17 +622,35 @@ h3 { font-size: 1.3rem; }
     justify-content: center;
     gap: 32px;
     box-shadow: -10px 0 40px rgba(0,0,0,0.15);
-    transition: right 0.35s ease;
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
     z-index: 200;
   }
-  .nav-links.open { right: 0; }
+  .nav-links.open { transform: translateX(0); }
   .nav-links a { font-size: 1.1rem; }
   .nav-cta { display: none; }
   .nav-toggle { display: flex; z-index: 210; }
   .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav-toggle.open span:nth-child(2) { opacity: 0; }
   .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 31, 25, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+    z-index: 190;
+  }
+  .nav-backdrop.open { opacity: 1; visibility: visible; }
 }
+
+@media (min-width: 861px) {
+  .nav-backdrop { display: none; }
+}
+
+body.nav-open { overflow: hidden; }
 
 @media (max-width: 640px) {
   .services-grid { grid-template-columns: 1fr; }
@@ -627,4 +660,23 @@ h3 { font-size: 1.3rem; }
   .footer-inner { grid-template-columns: 1fr; }
   .card-b { margin-left: 10%; }
   .about-card { width: 90%; }
+
+  .section { padding: 64px 0; }
+  .hero { padding: 84px 0 56px; }
+  .hero-actions { margin-bottom: 44px; }
+  .container { padding: 0 20px; }
+
+  .contact-cards { gap: 16px; }
+  .contact-card { max-width: 100%; padding: 20px 22px; }
+  .contact-value { font-size: 1rem; }
+  .contact-icon { width: 44px; height: 44px; }
+
+  .why-card, .service-card, .promoter-card { padding: 26px 22px; }
+}
+
+@media (max-width: 400px) {
+  .topbar-inner { gap: 14px; }
+  .topbar-item { font-size: 0.72rem; }
+  .stat-num, .stat-suffix { font-size: 1.7rem; }
+  .contact-value { font-size: 0.9rem; white-space: normal; overflow-wrap: break-word; }
 }

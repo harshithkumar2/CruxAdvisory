@@ -26,17 +26,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------- Mobile nav toggle ----------
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
+  const navBackdrop = document.getElementById('navBackdrop');
+
+  const closeNav = () => {
+    navToggle?.classList.remove('open');
+    navLinks?.classList.remove('open');
+    navBackdrop?.classList.remove('open');
+    document.body.classList.remove('nav-open');
+  };
+
+  const openNav = () => {
+    navToggle?.classList.add('open');
+    navLinks?.classList.add('open');
+    navBackdrop?.classList.add('open');
+    document.body.classList.add('nav-open');
+  };
 
   navToggle?.addEventListener('click', () => {
-    navToggle.classList.toggle('open');
-    navLinks.classList.toggle('open');
+    if (navLinks?.classList.contains('open')) closeNav();
+    else openNav();
+  });
+
+  navBackdrop?.addEventListener('click', closeNav);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNav();
   });
 
   navLinks?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navToggle?.classList.remove('open');
-      navLinks.classList.remove('open');
-    });
+    link.addEventListener('click', closeNav);
   });
 
   // ---------- Scroll reveal ----------
